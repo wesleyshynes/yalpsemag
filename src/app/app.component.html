@@ -1,13 +1,18 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-
-  username: {{ (userCreds$ | async).username }} <br>
-  role: {{ (userCreds$ | async).role }}
-  <br><br>
-  <button (click)="runReducer()">Load Creds</button>
+<div class="container text-center head-container">
+    <div class="row">
+        <div class="col">
+            <h1>
+              Welcome to {{ title }}!
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            username: {{ (userCreds$ | async).username }} <br> role: {{ (userCreds$ | async).role }}
+            <br><br>
+            <button (click)="runReducer()">Load Creds</button>
+        </div>
+    </div>
 </div>
 
 <router-outlet></router-outlet>
