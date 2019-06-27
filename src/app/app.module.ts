@@ -7,12 +7,14 @@ import { userReducer } from './store/reducers/user.reducer';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { GameBootstrapComponent } from './game-bootstrap/game-bootstrap.component';
 
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    GameBootstrapComponent
   ],
   imports: [
     BrowserModule,
