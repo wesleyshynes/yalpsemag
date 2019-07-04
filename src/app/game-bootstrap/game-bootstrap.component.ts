@@ -19,7 +19,7 @@ export class GameBootstrapComponent implements OnInit, OnDestroy, AfterViewInit 
   game: Phaser.Game
 
   public readonly gameConfig: any = {
-    type: Phaser.AUTO,
+    type: navigator.userAgent.indexOf('FireFox') ? Phaser.CANVAS : Phaser.AUTO,
     width: 800,
     height: 600,
     physics: {
@@ -29,13 +29,14 @@ export class GameBootstrapComponent implements OnInit, OnDestroy, AfterViewInit 
         debug: false,
       }
     },
-    parent: 'main-game',
+    parent: 'content',
   };
 
   constructor() { }
 
   ngOnInit() {
     this.game = new Phaser.Game(this.gameConfig)
+
   }
 
   ngOnDestroy() {
@@ -43,9 +44,9 @@ export class GameBootstrapComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngAfterViewInit() {
-    this.game.events.once('ready', () => {
-      this.game.scene.add('Scene', new SampleScene(), true);
-    });
+      this.game.events.once('ready', () => {
+        this.game.scene.add('Scene', new SampleScene(), true);
+      });
   }
 
 }

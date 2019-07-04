@@ -8,13 +8,15 @@ import { userReducer } from './store/reducers/user.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameBootstrapComponent } from './game-bootstrap/game-bootstrap.component';
+import { HomeComponent } from './home/home.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    GameBootstrapComponent
+    GameBootstrapComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

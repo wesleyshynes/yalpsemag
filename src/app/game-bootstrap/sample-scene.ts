@@ -6,6 +6,7 @@ export class SampleScene extends Phaser.Scene {
     }
 
     public preload() {
+        console.log('preload called')
         this.load.setBaseURL('http://labs.phaser.io');
         this.load.image('sky', 'assets/skies/space3.png');
         this.load.image('logo', 'assets/sprites/phaser3-logo.png');
@@ -13,6 +14,7 @@ export class SampleScene extends Phaser.Scene {
     }
 
     public create() {
+        console.log('create called')
         this.add.image(400, 300, 'sky');
 
         const particles = this.add.particles('red');
@@ -28,6 +30,10 @@ export class SampleScene extends Phaser.Scene {
             blendMode: Phaser.BlendModes.ADD
         });
         emitter.startFollow(logo);
+    }
+
+    public update() {
+        
     }
 
 }
