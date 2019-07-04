@@ -7,42 +7,45 @@ import { SampleScene } from './sample-scene';
   styleUrls: ['./game-bootstrap.component.less']
 })
 export class GameBootstrapComponent implements OnInit, OnDestroy, AfterViewInit {
-    // SAMPLE CODE
-    // https://github.com/weichen2046/phaser3-angular6-helloworld
+  // SAMPLE CODE
+  // https://github.com/weichen2046/phaser3-angular6-helloworld
 
-    // FIXES
-    // http://www.html5gamedevs.com/topic/38466-problems-with-phaser-3-polyfills-and-angular-6/
+  // SAMPLE GAME
+  // https://github.com/mshin1995/DinoDash
 
-    game: Phaser.Game
+  // FIXES
+  // http://www.html5gamedevs.com/topic/38466-problems-with-phaser-3-polyfills-and-angular-6/
 
-    public readonly gameConfig: any = {
-      type: Phaser.AUTO,
-      width: 800,
-      height: 600,
-      physics: {
-        default: 'arcade',
-        arcade: {
-          gravity: { y: 200 },
-          debug: false,
-        }
-      },
-      parent: 'content',
+  game: Phaser.Game
+
+  public readonly gameConfig: any = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    physics: {
+      default: 'arcade',
+      arcade: {
+        gravity: { y: 200 },
+        debug: false,
+      }
+    },
+    parent: 'main-game',
   };
 
   constructor() { }
 
   ngOnInit() {
-      this.game = new Phaser.Game(this.gameConfig)
+    this.game = new Phaser.Game(this.gameConfig)
   }
 
   ngOnDestroy() {
-      this.game.destroy(true);
-   }
+    this.game.destroy(true);
+  }
 
   ngAfterViewInit() {
-      this.game.events.once('ready', () => {
+    this.game.events.once('ready', () => {
       this.game.scene.add('Scene', new SampleScene(), true);
-});
-   }
+    });
+  }
 
 }
