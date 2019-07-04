@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameBootstrapComponent } from './game-bootstrap/game-bootstrap.component';
 import { HomeComponent } from './home/home.component';
+import { SimpleBaselineComponent } from './simple-baseline/simple-baseline.component';
 
 
 
@@ -16,7 +17,8 @@ import { HomeComponent } from './home/home.component';
   declarations: [
     AppComponent,
     GameBootstrapComponent,
-    HomeComponent
+    HomeComponent,
+    SimpleBaselineComponent
   ],
   imports: [
     BrowserModule,
