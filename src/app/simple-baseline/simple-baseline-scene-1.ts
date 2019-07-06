@@ -7,9 +7,11 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
     })
   }
 
+  keyList: any = {}
+
   public preload() {
     this.load.image('background', '../assets/simple-baseline/background.png')
-    this.load.image('astronaut', '../assets/simple-baseline/astronaut.png')
+    // this.load.image('astronaut', '../assets/simple-baseline/astronaut.png')
     this.load.spritesheet('astronaut', '../assets/simple-baseline/astronaut.png', { frameWidth: 32, frameHeight: 32 })
   }
 
@@ -50,6 +52,11 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
 
     this.player.anims.play('right')
     this.player.setVelocityX(50)
+
+    this.keyList = {
+        UP: this.input.keyboard.addKeys('UP')['UP'],
+        DOWN: this.input.keyboard.addKeys('DOWN')['DOWN']
+    }
     console.log(this.player)
   }
 
@@ -62,5 +69,16 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
           this.player.anims.play('right')
           this.player.setVelocityX(50)
       }
+
+      if(this.keyList.UP.isDown) {
+          // this.player.body.acceleration.y += -20
+          this.player.setVelocityY(-300)
+      }
+
+      if(this.keyList.DOWN.isDown) {
+          // this.player.body.acceleration.y += 20
+          this.player.setVelocityY(300)
+      }
+
   }
 }
