@@ -55,29 +55,48 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
 
     this.keyList = {
         UP: this.input.keyboard.addKeys('UP')['UP'],
-        DOWN: this.input.keyboard.addKeys('DOWN')['DOWN']
+        DOWN: this.input.keyboard.addKeys('DOWN')['DOWN'],
+        LEFT: this.input.keyboard.addKeys('LEFT')['LEFT'],
+        RIGHT: this.input.keyboard.addKeys('RIGHT')['RIGHT'],
     }
+    this.player.body.maxVelocity.x = 200
+    this.player.body.maxVelocity.y = 200
+    this.player.body.maxSpeed = 300
     console.log(this.player)
+
   }
 
   public update() {
-      if(this.player.x >= 784) {
-          this.player.setVelocityX(-50)
-          this.player.anims.play('left')
-      }
-      if(this.player.x <= 16){
-          this.player.anims.play('right')
-          this.player.setVelocityX(50)
+
+      if(this.keyList.RIGHT.isDown) {
+          if(this.player.anims.currentAnim.key != 'right') this.player.anims.play('right', true)
+          this.player.setVelocityX(100)
+          // this.player.body.acceleration.x += 10
+      } else if(this.keyList.LEFT.isDown) {
+          if(this.player.anims.currentAnim.key != 'left') this.player.anims.play('left', true)
+          this.player.setVelocityX(-100)
+          // this.player.body.acceleration.x -= 10
+      } else {
+          // this.player.setVelocityX(0)
+          if(this.player.body.velocity.x > 0) {
+              this.player.body.velocity.x -= 5
+          } else if (this.player.body.velocity.x < 0) {
+              this.player.body.velocity.x += 5
+          } else {
+              this.player.setVelocityX(0)
+          }
+          if(this.player.anims.currentAnim.key != 'down') this.player.anims.play('down', true)
       }
 
       if(this.keyList.UP.isDown) {
           // this.player.body.acceleration.y += -20
-          this.player.setVelocityY(-300)
-      }
-
-      if(this.keyList.DOWN.isDown) {
+          // if(this.player.anims.currentAnim.key != 'up') this.player.anims.play('up', true)
+          this.player.setVelocityY(-150)
+      } else if (this.keyList.DOWN.isDown) {
           // this.player.body.acceleration.y += 20
-          this.player.setVelocityY(300)
+          this.player.setVelocityY(150)
+      } else {
+          // this.player.setVelocityY(0)
       }
 
   }
