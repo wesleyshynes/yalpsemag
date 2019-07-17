@@ -1,7 +1,12 @@
 export class SimpleBaseLineScene1 extends Phaser.Scene {
 
-  player: any
-  ground: any
+  player: any;
+  ground: any;
+  platforms: any;
+  scoreText: any;
+
+  debugLimiter: any = {}
+
   constructor() {
     super({
       key: 'Main Scene'
@@ -11,7 +16,8 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
   keyList: any = {}
 
   public preload() {
-    this.load.image('platform', '../assets/simple-baseline/simple-platform-floor.jpg')
+    this.load.image('ground', '../assets/simple-baseline/simple-platform-floor.jpg')
+    this.load.image('metal-platform', '../assets/simple-baseline/simple-platform-metal.jpg')
     this.load.image('background', '../assets/simple-baseline/background.png')
     // this.load.image('astronaut', '../assets/simple-baseline/astronaut.png')
     this.load.spritesheet('astronaut', '../assets/simple-baseline/astronaut.png', { frameWidth: 32, frameHeight: 32 })
@@ -20,15 +26,41 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
   public create() {
     this.add.image(0, 0, 'background')
 
+    this.scoreText = this.add.text( 25, 25, 'Fuel: 0', { fontSize: '16px', fill: '#ffffff' })
+
     this.player = this.physics.add.sprite(100, 100, 'astronaut')
     this.player.setCollideWorldBounds(true)
+    this.player.fuel = 0
 
-    this.ground = this.add.tileSprite(400, 568, 600, 35, 'platform')
+    this.ground = this.add.tileSprite(400, 600-35/2, 800, 35, 'ground')
     this.physics.add.existing(this.ground)
     this.ground.body.immovable = true
     this.ground.body.moves = false
+    this.debugLimiter.ground = 0
 
-    this.physics.add.collider(this.player, this.ground)
+    this.platforms = this.physics.add.group()
+
+    let platformList = [{ x:500, y: 500, length: 300, height: 30, sprite: 'metal-platform'}]
+
+    platformList.forEach((p) => {
+        let newP = this.platforms.create(p.x, p.y, p.sprite)
+        newP.body.immovable = true
+        newP.body.moves = true
+        newP.body.allowGravity = false
+    })
+
+    this.physics.add.collider(this.player, this.ground, (colliderData, otherData) => {
+        this.player.fuel = 10
+        this.player.setVelocityY(-100)
+    }, null, this )
+
+    this.physics.add.collider(this.player, this.platforms, (obj1: any, obj2: any) => {
+        if(obj2.body.position.y < 550) {
+            // obj2.destroy()
+            obj2.body.position.y++
+        }
+        this.player.fuel = 10
+    }, null, this )
 
     this.anims.create({
       key: 'down',
@@ -97,16 +129,19 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
       if (this.player.anims.currentAnim.key != 'down') this.player.anims.play('down', true)
     }
 
-    if (this.keyList.UP.isDown) {
+    if (this.keyList.UP.isDown && this.player.fuel > 0) {
       // this.player.body.acceleration.y += -20
       // if(this.player.anims.currentAnim.key != 'up') this.player.anims.play('up', true)
       this.player.setVelocityY(-150)
+      this.player.fuel--
     } else if (this.keyList.DOWN.isDown) {
       // this.player.body.acceleration.y += 20
       this.player.setVelocityY(150)
     } else {
       // this.player.setVelocityY(0)
     }
+
+    this.scoreText.setText('Fuel: ' + (new Array(this.player.fuel).join('|-|')))
 
   }
 }
