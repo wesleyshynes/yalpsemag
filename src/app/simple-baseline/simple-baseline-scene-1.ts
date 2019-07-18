@@ -4,6 +4,7 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
   ground: any;
   platforms: any;
   scoreText: any;
+  emitter: any
 
   debugLimiter: any = {}
 
@@ -21,6 +22,9 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
     this.load.image('background', '../assets/simple-baseline/background.png')
     // this.load.image('astronaut', '../assets/simple-baseline/astronaut.png')
     this.load.spritesheet('astronaut', '../assets/simple-baseline/astronaut.png', { frameWidth: 32, frameHeight: 32 })
+
+    this.load.image('red', 'http://labs.phaser.io/assets/particles/red.png');
+
   }
 
   public create() {
@@ -31,6 +35,7 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
     this.player = this.physics.add.sprite(100, 100, 'astronaut')
     this.player.setCollideWorldBounds(true)
     this.player.fuel = 0
+    this.player.setDepth(1)
 
     this.ground = this.add.tileSprite(400, 600-35/2, 800, 35, 'ground')
     this.physics.add.existing(this.ground)
@@ -61,6 +66,17 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
         }
         this.player.fuel = 10
     }, null, this )
+
+    const particles = this.add.particles('red');
+    this.emitter = particles.createEmitter({
+        speed: 100,
+        scale: { start: .2, end: 0 },
+        blendMode: Phaser.BlendModes.ADD
+    });
+    this.emitter.startFollow(this.player);
+    console.log('emitter')
+    console.log(this.emitter)
+    this.emitter._visible = false
 
     this.anims.create({
       key: 'down',
@@ -134,11 +150,13 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
       // if(this.player.anims.currentAnim.key != 'up') this.player.anims.play('up', true)
       this.player.setVelocityY(-150)
       this.player.fuel--
+      this.emitter._visible = true
     } else if (this.keyList.DOWN.isDown) {
       // this.player.body.acceleration.y += 20
       this.player.setVelocityY(150)
     } else {
       // this.player.setVelocityY(0)
+      this.emitter._visible = false
     }
 
     this.scoreText.setText('Fuel: ' + (new Array(this.player.fuel).join('|-|')))
