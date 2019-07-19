@@ -55,7 +55,7 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
     })
 
     this.physics.add.collider(this.player, this.ground, (colliderData, otherData) => {
-        this.player.fuel = 10
+        this.player.fuel = 40
         this.player.setVelocityY(-100)
     }, null, this )
 
@@ -64,7 +64,7 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
             // obj2.destroy()
             obj2.body.position.y++
         }
-        this.player.fuel = 10
+        this.player.fuel = 40
     }, null, this )
 
     const particles = this.add.particles('red');
@@ -159,7 +159,7 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
       this.emitter._visible = false
     }
 
-    this.scoreText.setText('Fuel: ' + (new Array(this.player.fuel).join('|-|')))
+    this.scoreText.setText('Fuel: ' + (new Array(Math.floor(this.player.fuel)).join('.')))
 
   }
 }
