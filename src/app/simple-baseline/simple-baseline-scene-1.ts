@@ -4,7 +4,9 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
   ground: any;
   platforms: any;
   scoreText: any;
-  emitter: any
+  emitter: any;
+
+  apples: any;
 
   debugLimiter: any = {}
 
@@ -23,6 +25,8 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
     // this.load.image('astronaut', '../assets/simple-baseline/astronaut.png')
     this.load.spritesheet('astronaut', '../assets/simple-baseline/astronaut.png', { frameWidth: 32, frameHeight: 32 })
 
+    this.load.spritesheet('star-apple', '../assets/simple-baseline/star-apple.png', { frameWidth: 64, frameHeight: 64 })
+
     this.load.image('red', 'http://labs.phaser.io/assets/particles/red.png');
 
   }
@@ -30,11 +34,12 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
   public create() {
     this.add.image(0, 0, 'background')
 
-    this.scoreText = this.add.text( 25, 25, 'Fuel: 0', { fontSize: '16px', fill: '#ffffff' })
+    this.scoreText = this.add.text( 25, 25, 'Fuel: 0 \n Apples: 0', { fontSize: '16px', fill: '#ffffff' })
 
     this.player = this.physics.add.sprite(100, 100, 'astronaut')
     this.player.setCollideWorldBounds(true)
     this.player.fuel = 0
+    this.player.apples = 0
     this.player.setDepth(1)
 
     this.ground = this.add.tileSprite(400, 600-35/2, 800, 35, 'ground')
@@ -53,6 +58,37 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
         newP.body.moves = true
         newP.body.allowGravity = false
     })
+
+    this.apples = this.physics.add.group()
+
+    let appleList = [
+        { x: 500, y: 40 },
+        { x: 300, y: 40 },
+        { x: 200, y: 40 },
+    ]
+
+    this.anims.create({
+        key: 'star-apple',
+        frames: this.anims.generateFrameNumbers('star-apple', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
+    })
+
+    appleList.forEach((a) => {
+        let newA = this.apples.create(a.x, a.y, 'star-apple')
+        // console.log(newA)
+        newA.setScale(.5)
+        newA.anims.play('star-apple')
+    })
+
+    this.physics.add.collider(this.player, this.apples, (playerData, appleData) => {
+        this.player.apples++
+        appleData.destroy()
+    })
+
+    this.physics.add.collider(this.apples, this.ground)
+    this.physics.add.collider(this.apples, this.platforms)
+
 
     this.physics.add.collider(this.player, this.ground, (colliderData, otherData) => {
         this.player.fuel = 40
@@ -74,8 +110,8 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
         blendMode: Phaser.BlendModes.ADD
     });
     this.emitter.startFollow(this.player);
-    console.log('emitter')
-    console.log(this.emitter)
+    // console.log('emitter')
+    // console.log(this.emitter)
     this.emitter._visible = false
 
     this.anims.create({
@@ -159,7 +195,7 @@ export class SimpleBaseLineScene1 extends Phaser.Scene {
       this.emitter._visible = false
     }
 
-    this.scoreText.setText('Fuel: ' + (new Array(Math.floor(this.player.fuel)).join('.')))
+    this.scoreText.setText('Fuel: ' + (new Array(Math.floor(this.player.fuel)).join('.')) + '\nApples: ' + this.player.apples )
 
   }
 }
